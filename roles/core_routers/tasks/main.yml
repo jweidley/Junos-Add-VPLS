@@ -1,0 +1,4 @@
+---
+- name: Generate PE Router configuration files
+  template: src=router.j2 dest="{{playbook_dir}}/Configs/{{item.hostname}}.set"
+  with_items: "{{core_routers}}"

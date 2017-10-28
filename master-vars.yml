@@ -1,0 +1,66 @@
+---
+#######################################################################################
+# Common Settings:
+# 	- asn: Autonomous System Number for the iBGP
+#	- router_target: route target for the new VRF
+#	- vrf_name: Name of the VRF to be created
+#	- user_vlan: VLAN tag
+#	- user_int_net: First 3 octets of user subnet. 
+#	- user_int_mask: network mask
+#######################################################################################
+asn: 65100
+route_target: 201
+vrf_name: vr1-vpls
+user_vlan: 201
+user_int_net: 172.17.1
+user_int_mask: 24
+
+#######################################################################################
+# core_routers:
+#	This variable should contain information for the core PE routers. Options are:
+#	- hostname: hostname of the device
+#	- user_int: the customer facing physical interface for VRF
+#	- user_vlan: VLAN tag
+#	- lo0_ip: The loopback IP address for this router
+#	- siteid: VPLS site-id. This value will be use for the 4th octet for the
+#	          int_router interface configuration.
+#######################################################################################
+core_routers:
+  - { hostname: vmx5, 
+      user_int: ge-0/0/2,
+      user_vlan: 201,
+      lo0_ip: 1.1.1.5,
+      siteid: 5
+    }
+  - { hostname: vmx6, 
+      user_int: ge-0/0/2,
+      user_vlan: 201,
+      lo0_ip: 1.1.1.6,
+      siteid: 6
+    }
+  - { hostname: vmx7, 
+      user_int: ge-0/0/2,
+      user_vlan: 201,
+      lo0_ip: 1.1.1.7,
+      siteid: 7
+    }
+
+#######################################################################################
+# int_router:
+#	This variable should contain the information for the internal test router.
+#	- peer: the name of the core router this link connects to. Must match 'hostname'
+#	        from core_routers.
+#	- interface: physical interface that connects to the core router
+#######################################################################################
+int_interfaces:
+  - { peer: vmx5,
+      interface: ge-0/0/1
+    } 
+  - { peer: vmx6,
+      interface: ge-0/0/2
+    } 
+  - { peer: vmx7,
+      interface: ge-0/0/3
+    } 
+
+## end of file ##

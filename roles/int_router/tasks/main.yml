@@ -1,0 +1,3 @@
+---
+- name: Generate INTERNAL ROUTER VPLS configuration file
+  template: src=router.j2 dest="{{playbook_dir}}/Configs/vmx-int1.set"

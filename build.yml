@@ -1,0 +1,21 @@
+---
+- name: Generate VPLS configurations
+  hosts: localhost
+  gather_facts: no
+
+  roles:
+    - core_routers
+    - int_router
+
+- name: Push Junos Configs
+  hosts: devices
+  roles:
+  - Juniper.junos
+  connection: local
+  gather_facts: no
+
+  tasks:
+  - name: Checking NETCONF Connectivity
+    wait_for: host={{ junos_host }} port=830 timeout=5
+
+

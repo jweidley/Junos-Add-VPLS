@@ -1,0 +1,17 @@
+set interfaces {{ item.user_int }} flexible-vlan-tagging
+set interfaces {{ item.user_int }} mtu 1522
+set interfaces {{ item.user_int }} encapsulation flexible-ethernet-services
+set interfaces {{ item.user_int }} unit {{ item.user_vlan }} description {{ vrf_name }}
+set interfaces {{ item.user_int }} unit {{ item.user_vlan }} encapsulation vlan-vpls
+set interfaces {{ item.user_int }} unit {{ item.user_vlan }} vlan-id {{ item.user_vlan }}
+set interfaces {{ item.user_int }} unit {{ item.user_vlan }} family vpls
+
+set routing-instances {{ vrf_name }} instance-type vpls
+set routing-instances {{ vrf_name }} interface {{ item.user_int }}.{{ item.user_vlan }}
+set routing-instances {{ vrf_name }} route-distinguisher {{ item.lo0_ip }}:{{ route_target }}
+set routing-instances {{ vrf_name }} vrf-target import target:{{ asn }}:{{ route_target }}
+set routing-instances {{ vrf_name }} vrf-target export target:{{ asn }}:{{ route_target }}
+set routing-instances {{ vrf_name }} protocols vpls site-range 10
+set routing-instances {{ vrf_name }} protocols vpls site s1 site-identifier {{ item.siteid }}
+set routing-instances {{ vrf_name }} protocols vpls site s1 site-preference primary
+set routing-instances {{ vrf_name }} protocols vpls site s1 interface {{ item.user_int }}.{{ item.user_vlan }}

@@ -1,0 +1,15 @@
+{% for zz in core_routers %}
+{% for yy in int_interfaces %}
+{% if zz.hostname == yy.peer%}
+set interfaces {{ yy.interface }} vlan-tagging
+set interfaces {{ yy.interface }} mtu 1522
+set interfaces {{ yy.interface }} unit {{ zz.user_vlan }} description {{yy.peer}}-{{ vrf_name }}
+set interfaces {{ yy.interface }} unit {{ zz.user_vlan }} vlan-id {{ zz.user_vlan }}
+set interfaces {{ yy.interface }} unit {{ zz.user_vlan }} family inet address {{ user_int_net }}.{{ zz.siteid }}/{{ user_int_mask }}
+set routing-instances {{ yy.peer }}-{{ vrf_name }} instance-type virtual-router
+set routing-instances {{ yy.peer }}-{{ vrf_name }} interface {{ yy.interface }}.{{ zz.user_vlan }}
+set routing-instances {{ yy.peer }}-{{ vrf_name }} routing-options static route 0.0.0.0/0 next-hop {{ user_int_net}}.1
+{% endif %}
+{% endfor %}
+{% endfor %}
+
